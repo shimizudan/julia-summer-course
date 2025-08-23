@@ -26,7 +26,7 @@
         }
         
         header {
-            background: linear-gradient(135deg, #cb3c33 0%, #389826 50%, #9558b2 100%);
+            background: linear-gradient(135deg, #cb3c33 0%, #4063d8 25%, #389826 50%, #9558b2 100%);
             color: white;
             text-align: center;
             padding: 80px 20px;
@@ -87,19 +87,19 @@
         }
         
         .day-card:nth-child(2) {
-            border-left-color: #389826;
+            border-left-color: #4063d8;
         }
         
         .day-card:nth-child(3) {
-            border-left-color: #9558b2;
+            border-left-color: #389826;
         }
         
         .day-card:nth-child(4) {
-            border-left-color: #cb3c33;
+            border-left-color: #9558b2;
         }
         
         .day-card:nth-child(5) {
-            border-left-color: #389826;
+            border-left-color: #cb3c33;
         }
         
         .day-card:hover {
@@ -139,9 +139,9 @@
         }
         
         .slides-btn {
-            background: linear-gradient(135deg, #9558b2 0%, #8e44ad 100%);
+            background: linear-gradient(135deg, #4063d8 0%, #3a5bc7 100%);
             color: white;
-            box-shadow: 0 3px 10px rgba(149, 88, 178, 0.3);
+            box-shadow: 0 3px 10px rgba(64, 99, 216, 0.3);
         }
         
         .material-btn:hover {
@@ -172,6 +172,14 @@
             position: relative;
         }
         
+        .info-section:nth-child(odd) {
+            border-left-color: #4063d8;
+        }
+        
+        .info-section:nth-child(even) {
+            border-left-color: #9558b2;
+        }
+        
         .info-section::before {
             content: '';
             position: absolute;
@@ -179,7 +187,7 @@
             right: 0;
             width: 60px;
             height: 60px;
-            background: linear-gradient(135deg, rgba(203, 60, 51, 0.1) 0%, rgba(149, 88, 178, 0.1) 100%);
+            background: linear-gradient(135deg, rgba(203, 60, 51, 0.1) 0%, rgba(64, 99, 216, 0.1) 50%, rgba(149, 88, 178, 0.1) 100%);
             border-radius: 0 15px 0 60px;
         }
         
@@ -188,7 +196,7 @@
             color: #2c3e50;
             margin-bottom: 20px;
             font-weight: 700;
-            background: linear-gradient(135deg, #cb3c33 0%, #9558b2 100%);
+            background: linear-gradient(135deg, #cb3c33 0%, #4063d8 50%, #9558b2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
