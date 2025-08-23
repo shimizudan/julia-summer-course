@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Julia言語 夏期講習教材</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-align: center;
+            padding: 60px 20px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+        
+        .subtitle {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .day-card {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .day-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+        }
+        
+        .day-title {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        .materials {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .material-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            font-size: 0.9em;
+        }
+        
+        .notebook-btn {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+        }
+        
+        .slides-btn {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+        }
+        
+        .material-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        
+        .icon {
+            width: 16px;
+            height: 16px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            color: #666;
+            border-top: 1px solid #eee;
+            margin-top: 60px;
+        }
+        
+        .info-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .info-title {
+            font-size: 1.3em;
+            color: #333;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            header {
+                padding: 40px 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .days-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .materials {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Julia言語 夏期講習</h1>
+            <p class="subtitle">プログラミング学習教材</p>
+        </header>
+        
+        <div class="info-section">
+            <h2 class="info-title">📚 教材について</h2>
+            <p>この夏期講習では、Julia言語の基礎から応用まで5日間で学習できます。各日程ごとにJupyter NotebookとスライドをCloud環境で学習できます。</p>
+        </div>
+        
+        <div class="info-section">
+            <h2 class="info-title">💡 使い方</h2>
+            <ul style="margin-left: 20px;">
+                <li><strong>Notebook:</strong> Google Colabで直接実行・編集可能なJupyterノートブック</li>
+                <li><strong>Slides:</strong> 講義資料（Markdownファイル）</li>
+            </ul>
+        </div>
+        
+        <div class="days-grid" id="daysGrid">
+        </div>
+        
+        <footer>
+            <p>&copy; 2025 Dan Shimizu - Julia言語 夏期講習教材</p>
+        </footer>
+    </div>
+    
+    <script>
+        const daysData = [
+            { day: 1, title: "Julia入門", description: "プログラミング基礎" },
+            { day: 2, title: "データ型と制御構造", description: "条件分岐とループ" },
+            { day: 3, title: "関数とモジュール", description: "コード整理とモジュール化" },
+            { day: 4, title: "データ処理", description: "配列とDataFrames" },
+            { day: 5, title: "応用プログラミング", description: "実践的な問題解決" }
+        ];
+        
+        function createColabUrl(filename) {
+            const repoUrl = window.location.origin + window.location.pathname.replace('/index.html', '');
+            return `https://colab.research.google.com/github/USER/REPO/blob/main/${filename}`;
+        }
+        
+        function createGitHubUrl(filename) {
+            return `./${filename}`;
+        }
+        
+        function renderDays() {
+            const grid = document.getElementById('daysGrid');
+            
+            daysData.forEach(dayData => {
+                const dayCard = document.createElement('div');
+                dayCard.className = 'day-card';
+                
+                const notebookFile = `julia_day${dayData.day}_fin.ipynb`;
+                const slidesFile = `julia_day${dayData.day}_slides.md`;
+                
+                dayCard.innerHTML = `
+                    <h3 class="day-title">Day ${dayData.day}: ${dayData.title}</h3>
+                    <p style="color: #666; margin-bottom: 20px;">${dayData.description}</p>
+                    <div class="materials">
+                        <a href="#" class="material-btn notebook-btn" onclick="openInColab('${notebookFile}')">
+                            <span class="icon">📓</span>
+                            Notebook (Colab)
+                        </a>
+                        <a href="${slidesFile.replace('.md', '.html')}" class="material-btn slides-btn" target="_blank">
+                            <span class="icon">📄</span>
+                            Slides
+                        </a>
+                    </div>
+                `;
+                
+                grid.appendChild(dayCard);
+            });
+        }
+        
+        function openInColab(filename) {
+            const currentUrl = window.location.href;
+            const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
+            const fileUrl = baseUrl + filename;
+            const colabUrl = `https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb#scrollTo=WOJ4UDqhF8NW`;
+            
+            alert(`Google Colabでファイルを開くには：\n1. 以下のURLをコピーしてください：\n${fileUrl}\n\n2. Google Colab (https://colab.research.google.com/) を開き、\n「ファイル」→「ノートブックを開く」→「GitHub」タブから、\nまたは「アップロード」タブでローカルファイルを選択してください。`);
+            
+            navigator.clipboard.writeText(fileUrl).then(() => {
+                console.log('ファイルURLをクリップボードにコピーしました');
+            }).catch(err => {
+                console.error('クリップボードへのコピーに失敗しました:', err);
+            });
+        }
+        
+        document.addEventListener('DOMContentLoaded', renderDays);
+    </script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高校数学とJulia言語 Day 2</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .slide {
+            background: white;
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            page-break-after: always;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+        
+        .highlight {
+            background-color: #e8f5e8;
+            padding: 15px;
+            border-left: 4px solid #27ae60;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            white-space: pre-line;
+        }
+        
+        .math {
+            font-size: 1.2em;
+            text-align: center;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f0f8ff;
+            border-radius: 5px;
+        }
+        
+        .warning {
+            background-color: #fff3cd;
+            padding: 15px;
+            border-left: 4px solid #ffc107;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .navigation:hover {
+            background: #2980b9;
+            text-decoration: none;
+            color: white;
+        }
+        
+        @media print {
+            .navigation {
+                display: none;
+            }
+            .slide {
+                margin: 0;
+                box-shadow: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .slide {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="navigation">← メニューに戻る</a>
+    
+    <div class="container">
+        <div class="slide">
+            <h1>高校数学とJulia言語 Day 2</h1>
+            <p><strong>関数を定義してグラフを描こう！</strong></p>
+            <p>城北中学校・高等学校　中学3年・高校1年<br>
+            夏期講習会III 2025/8/24～2025/8/28<br>
+            担当：清水団</p>
+        </div>
+
+        <div class="slide">
+            <h2>📅 5日間の学習予定</h2>
+            <ul>
+                <li><strong>Day 1</strong>：Google Colabの紹介・基本計算 ✅</li>
+                <li><strong>Day 2</strong>：関数のグラフの描画 ← 今日はここ！</li>
+                <li><strong>Day 3</strong>：最適化（最大・最小）</li>
+                <li><strong>Day 4</strong>：データの分析</li>
+                <li><strong>Day 5</strong>：確率・シミュレーション</li>
+            </ul>
+            <div class="highlight">
+                今日のゴール：関数を定義してグラフを描けるようになろう！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🎯 Julia言語での関数定義</h2>
+            <p><strong>数学の関数をそのまま書ける！</strong></p>
+            
+            <h3>1. 基本的な関数定義</h3>
+            <div class="code-block">
+function 関数名(引数)
+    # 処理
+    return 戻り値
+end
+            </div>
+
+            <h3>2. 短縮形での関数定義（おすすめ）</h3>
+            <div class="code-block">
+関数名(引数) = 式
+            </div>
+
+            <div class="math">
+                <strong>数学</strong>: f(x) = 2x + 1 → <strong>Julia</strong>: <code>f(x) = 2x + 1</code>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🔢 関数を定義してみよう！</h2>
+            
+            <h3>基本的な関数の例</h3>
+            <div class="code-block">
+# 1次関数
+f(x) = 2x + 1
+
+# 2次関数
+g(x) = x^2 - 3x + 2
+
+# 三角関数
+h(x) = sin(x) + cos(x)
+            </div>
+
+            <h3>関数の値を計算</h3>
+            <div class="code-block">
+f(3)    # → 7
+g(1)    # → 0
+h(π/4)  # → √2
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📊 グラフを描く準備</h2>
+            <p><strong>Plots.jlパッケージを使います</strong></p>
+            
+            <div class="code-block">
+# パッケージの読み込み
+using Plots
+
+# フォント設定（日本語ラベルのため）
+gr(fontfamily="ipam")
+            </div>
+
+            <div class="warning">
+                初回だけ時間がかかることがありますが、待ちましょう！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🎨 最初のグラフを描こう！</h2>
+            
+            <h3>基本的なグラフの描き方</h3>
+            <div class="code-block">
+# シンプルなグラフ
+plot(f)
+
+# 範囲を指定してグラフを描く
+plot(f, xlim=(-10,10))
+
+# ラベルやタイトルを追加
+plot(f, label="f(x) = 2x + 1", title="1次関数のグラフ", linewidth=2)
+            </div>
+
+            <p><strong>実際にGoogle Colabで試してみましょう！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>📈 様々な関数のグラフ</h2>
+            
+            <h3>1次関数のファミリー</h3>
+            <div class="code-block">
+f1(x) = x
+f2(x) = 2x
+f3(x) = -x + 3
+
+plot(f1, label="y = x", linewidth=2)
+plot!(f2, label="y = 2x", linewidth=2)
+plot!(f3, label="y = -x + 3", linewidth=2)
+            </div>
+
+            <div class="highlight">
+                plot!() で既存のグラフに追加できます！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📉 2次関数のグラフ</h2>
+            
+            <h3>放物線のファミリー</h3>
+            <div class="code-block">
+p1(x) = x^2
+p2(x) = 2x^2
+p3(x) = -x^2
+p4(x) = x^2 + 2x + 1
+
+plot(p1, label="y = x²", linewidth=2)
+plot!(p2, label="y = 2x²", linewidth=2)
+plot!(p3, label="y = -x²", linewidth=2)
+plot!(p4, label="y = x² + 2x + 1", linewidth=2)
+            </div>
+
+            <p><strong>グラフの形の変化を観察してみましょう！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>🌊 三角関数のグラフ</h2>
+            
+            <h3>波の美しさを見てみよう</h3>
+            <div class="code-block">
+# 基本の三角関数
+plot(sin, xlim=(-2π,2π), label="y = sin(x)", linewidth=2)
+plot!(cos, xlim=(-2π,2π), label="y = cos(x)", linewidth=2)
+            </div>
+
+            <h3>三角関数の変形</h3>
+            <div class="code-block">
+s1(x) = sin(x)
+s2(x) = 2sin(x)        # 振幅2倍
+s3(x) = sin(2x)        # 周期1/2倍
+s4(x) = sin(x + π/4)   # 位相をπ/4ずらす
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📊 指数関数・対数関数</h2>
+            
+            <h3>急激に変化する関数たち</h3>
+            <div class="code-block">
+# 指数関数
+e1(x) = 2^x
+e2(x) = exp(x)    # e^x
+
+# 対数関数
+l1(x) = log(2, x) # log₂(x)
+l2(x) = log(x)    # 自然対数 ln(x)
+
+plot(e1, xlim=(-3,3), label="y = 2ˣ", linewidth=2)
+plot!(l1, xlim=(0.1,8), label="y = log₂(x)", linewidth=2)
+            </div>
+
+            <p><strong>互いに逆関数の関係にあります！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>🎭 複雑な関数のグラフ</h2>
+            
+            <h3>関数を組み合わせてみよう</h3>
+            <div class="code-block">
+# 3次関数
+complex1(x) = x^3 - 3x^2 + 2x + 1
+
+# 減衰振動
+complex2(x) = sin(x) * exp(-x/5)
+
+# 絶対値を含む関数
+complex3(x) = abs(x) * sin(x)
+            </div>
+
+            <div class="highlight">
+                複数の関数を掛け合わせたり、足し合わせたりして面白い形を作れます！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🎨 グラフの見た目をカスタマイズ</h2>
+            
+            <h3>線の太さや色を変更</h3>
+            <div class="code-block">
+plot(sin, 
+     xlim=(-2π,2π), 
+     label="y = sin(x)", 
+     linewidth=3,           # 線の太さ
+     color=:red,            # 線の色
+     title="カスタマイズされたグラフ",
+     xlabel="x",            # x軸のラベル
+     ylabel="y")            # y軸のラベル
+            </div>
+
+            <h3>利用可能な色</h3>
+            <p><code>:red</code>, <code>:blue</code>, <code>:green</code>, <code>:orange</code>, <code>:purple</code>, <code>:pink</code>, <code>:yellow</code></p>
+        </div>
+
+        <div class="slide">
+            <h2>📝 実習：グラフを描いてみよう</h2>
+            <p><strong>実際にGoogle Colabで以下を試してみましょう</strong></p>
+            
+            <ol>
+                <li><strong>自分の好きな1次関数を定義してグラフを描く</strong></li>
+                <li><strong>2次関数の頂点を視覚的に確認する</strong></li>
+                <li><strong>三角関数の周期を観察する</strong></li>
+                <li><strong>複数のグラフを重ねて比較する</strong></li>
+            </ol>
+
+            <div class="highlight">
+                分からないことがあったら、遠慮なく質問してください！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📚 本日の演習問題</h2>
+            
+            <h3>問題1: 2次関数の分析</h3>
+            <p>f(x) = x² - 4x + 3 について：</p>
+            <ol>
+                <li>グラフを描く（-1 ≤ x ≤ 5）</li>
+                <li>頂点の座標を求める</li>
+                <li>x切片（根）を求める</li>
+            </ol>
+
+            <h3>問題2: 三角関数の合成</h3>
+            <p>g(x) = sin(x) + cos(x) について：</p>
+            <ol>
+                <li>グラフを描く（-2π ≤ x ≤ 2π）</li>
+                <li>最大値と最小値を予想</li>
+                <li>周期を調べる</li>
+            </ol>
+
+            <h3>問題3: 自由課題</h3>
+            <p>自分で面白い関数を作ってグラフを描いてみる</p>
+        </div>
+
+        <div class="slide">
+            <h2>🔍 グラフから読み取れること</h2>
+            
+            <h3>関数の性質を視覚的に理解</h3>
+            <div class="highlight">
+                <p><strong>グラフを見ることで分かること：</strong></p>
+                <ul>
+                    <li>📈 <strong>増減の様子</strong>：どこで増加・減少するか</li>
+                    <li>🎯 <strong>最大値・最小値</strong>：極値の位置</li>
+                    <li>🔄 <strong>周期性</strong>：繰り返しパターン</li>
+                    <li>⚖️ <strong>対称性</strong>：対称軸や中心</li>
+                </ul>
+            </div>
+
+            <p><strong>数式だけでは見えない性質が一目で分かります！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>🎨 演習問題を解いてみよう！</h2>
+            <p><strong>Google Colabを開いて、実際にコードを書いてみましょう</strong></p>
+            
+            <h3>取り組み方</h3>
+            <ol>
+                <li>関数を定義する</li>
+                <li>グラフを描く</li>
+                <li>特徴を観察する</li>
+                <li>予想と結果を比較する</li>
+                <li>ノートブックを保存してGoogle Classroomから提出</li>
+            </ol>
+
+            <div class="warning">
+                エラーが出ても慌てずに！コードを見直して再実行してみましょう
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🌟 今日のまとめ</h2>
+            
+            <h3>学んだこと</h3>
+            <ul>
+                <li>Julia言語での関数の定義方法</li>
+                <li>Plots.jlを使ったグラフの描画</li>
+                <li>1次関数、2次関数、三角関数、指数関数のグラフ</li>
+                <li>複数のグラフを重ねて描く方法</li>
+                <li>グラフの見た目のカスタマイズ</li>
+            </ul>
+
+            <h3>関数とグラフの価値</h3>
+            <p>✅ <strong>直感的理解</strong>：数式を視覚化して理解を深める<br>
+            ✅ <strong>性質の発見</strong>：グラフから新しい性質を発見<br>
+            ✅ <strong>比較分析</strong>：複数の関数を簡単に比較</p>
+        </div>
+
+        <div class="slide">
+            <h2>🔮 次回予告：Day 3</h2>
+            <p><strong>最適化（最大・最小）</strong></p>
+            
+            <ul>
+                <li>関数の最大値・最小値を求める方法</li>
+                <li>微分を使った解析的手法</li>
+                <li>Juliaを使った数値的手法</li>
+                <li>実際の問題への応用</li>
+            </ul>
+
+            <div class="highlight">
+                今日描いたグラフを使って、最適化問題に挑戦します！
+            </div>
+
+            <h3>宿題</h3>
+            <p>今日の演習問題を完成させて、Google Classroomに提出してください。</p>
+        </div>
+
+        <div class="slide">
+            <h2>💡 発展的な内容（時間がある人へ）</h2>
+            
+            <h3>より高度なグラフ表現</h3>
+            <div class="code-block">
+# パラメトリック関数（媒介変数表示）
+t = 0:0.1:2π
+x = cos.(t)
+y = sin.(t)
+plot(x, y, label="円", aspect_ratio=:equal)
+
+# 極座標グラフ
+r(θ) = 1 + cos(θ)
+θ = 0:0.1:2π
+plot(θ, r.(θ), proj=:polar, label="カージオイド")
+            </div>
+
+            <p><strong>美しい曲線を描けます！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>❓ 質問タイム</h2>
+            <p><strong>何か分からないことはありませんか？</strong></p>
+            
+            <ul>
+                <li>関数の定義方法</li>
+                <li>グラフの描き方</li>
+                <li>エラーの解決方法</li>
+                <li>演習問題について</li>
+                <li>その他、何でも！</li>
+            </ul>
+
+            <div class="highlight">
+                積極的に質問して、理解を深めましょう！
+            </div>
+
+            <p><strong>お疲れさまでした！</strong></p>
+        </div>
+    </div>
+</body>
+</html>

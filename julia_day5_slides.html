@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高校数学とJulia言語 Day 5</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 18px;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .slide {
+            background: white;
+            margin: 30px 0;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            page-break-after: always;
+        }
+        
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #e67e22;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 2.2em;
+        }
+        
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        h3 {
+            color: #34495e;
+            margin-top: 20px;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+        
+        .highlight {
+            background-color: #fff5e6;
+            padding: 15px;
+            border-left: 4px solid #e67e22;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .code-block {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 20px;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            overflow-x: auto;
+            white-space: pre-line;
+        }
+        
+        .success {
+            background-color: #d4edda;
+            padding: 15px;
+            border-left: 4px solid #28a745;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        
+        .final-message {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .celebration {
+            font-size: 28px;
+            text-align: center;
+            color: #e67e22;
+            margin: 20px 0;
+        }
+        
+        .probability-table {
+            font-size: 18px;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            border: 1px solid #dee2e6;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #e9ecef;
+            font-weight: bold;
+        }
+        
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 8px;
+        }
+        
+        .navigation {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        
+        .navigation:hover {
+            background: #2980b9;
+            text-decoration: none;
+            color: white;
+        }
+        
+        @media print {
+            .navigation {
+                display: none;
+            }
+            .slide {
+                margin: 0;
+                box-shadow: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            .slide {
+                padding: 20px;
+            }
+            h1 {
+                font-size: 1.8em;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html" class="navigation">← メニューに戻る</a>
+    
+    <div class="container">
+        <div class="slide">
+            <h1>高校数学とJulia言語 Day 5</h1>
+            <p><strong>確率とシミュレーション</strong></p>
+            <p><strong>〜最終日・5日間の集大成〜</strong></p>
+            <p>城北中学校・高等学校　中学3年・高校1年<br>
+            夏期講習会III 2025/8/24～2025/8/28<br>
+            担当：清水団</p>
+        </div>
+
+        <div class="slide">
+            <h2>📅 5日間の学習予定</h2>
+            <ul>
+                <li><strong>Day 1</strong>：Google Colabの紹介・基本計算 ✅</li>
+                <li><strong>Day 2</strong>：関数のグラフの描画 ✅</li>
+                <li><strong>Day 3</strong>：最適化（最大・最小） ✅</li>
+                <li><strong>Day 4</strong>：データの分析 ✅</li>
+                <li><strong>Day 5</strong>：確率・シミュレーション ← 今日はここ！<strong>最終日</strong></li>
+            </ul>
+            <div class="highlight">
+                今日のゴール：確率をシミュレーションで体験し、理論と実践を結びつけよう！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🎲 確率とシミュレーションの重要性</h2>
+            <p><strong>現代社会のあらゆる場面で活用されています！</strong></p>
+            
+            <h3>実社会での応用例</h3>
+            <ul>
+                <li>🌦️ <strong>天気予報</strong>：降水確率の計算</li>
+                <li>🏥 <strong>保険</strong>：事故や病気のリスク評価</li>
+                <li>⚽ <strong>スポーツ</strong>：勝率の予測、戦略の最適化</li>
+                <li>📈 <strong>経済</strong>：株価の変動予測、リスク管理</li>
+                <li>🎮 <strong>ゲーム</strong>：確率の計算、戦略の分析</li>
+                <li>💊 <strong>医療</strong>：薬の効果や副作用の評価</li>
+            </ul>
+
+            <div class="success">
+                シミュレーションで実験を何度もしなくても確率的現象を理解できます！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🪙 基本的な確率：コイン投げ</h2>
+            
+            <h3>理論 vs 実践</h3>
+            <p><strong>理論：表が出る確率は0.5</strong><br>
+            <strong>実践：本当にそうなるの？</strong></p>
+            
+            <div class="code-block">
+# コイン投げの関数
+function coin_flip()
+    return rand() < 0.5 ? "表" : "裏"
+end
+
+# 大量のシミュレーション
+function simulate_coin_flips(n)
+    heads_count = sum([rand() < 0.5 for _ in 1:n])
+    return heads_count / n
+end
+
+# 異なる回数でテスト
+for n in [10, 100, 1000, 10000, 100000]
+    prob = simulate_coin_flips(n)
+    println("$(n)回: 確率 = $(round(prob, digits=4))")
+end
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📊 大数の法則を視覚化</h2>
+            <p><strong>試行回数が増えるほど理論値に近づく</strong></p>
+            
+            <div class="code-block">
+# 確率の収束を可視化
+n_max = 1000
+cumulative_prob = []
+heads_count = 0
+
+for i in 1:n_max
+    if rand() < 0.5
+        heads_count += 1
+    end
+    push!(cumulative_prob, heads_count / i)
+end
+
+# グラフで収束を確認
+plot(1:n_max, cumulative_prob, 
+     title="コイン投げの確率の収束", 
+     xlabel="試行回数", ylabel="表が出る確率")
+hline!([0.5], color=:red, label="理論値")
+            </div>
+
+            <p><strong>これが「大数の法則」です！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>🎲 サイコロの確率分布</h2>
+            
+            <h3>1つのサイコロ：各目の確率は1/6</h3>
+            <div class="code-block">
+# サイコロシミュレーション
+n_rolls = 6000
+dice_results = [rand(1:6) for _ in 1:n_rolls]
+
+# ヒストグラムで分布を確認
+histogram(dice_results, bins=0.5:1:6.5, 
+         title="サイコロの目の分布", 
+         xlabel="サイコロの目", ylabel="出現回数")
+         
+# 理論値の線を追加
+hline!([n_rolls/6], color=:red, label="理論値")
+            </div>
+
+            <p><strong>公正なサイコロなら、各目がほぼ同じ回数出るはず！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>🎲🎲 2つのサイコロの和</h2>
+            
+            <h3>どの数字が最も出やすい？</h3>
+            <div class="probability-table">
+                <table>
+                    <tr>
+                        <th>和</th>
+                        <th>出現パターン</th>
+                        <th>確率</th>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>(1,1)</td>
+                        <td>1/36</td>
+                    </tr>
+                    <tr>
+                        <td>3</td>
+                        <td>(1,2), (2,1)</td>
+                        <td>2/36</td>
+                    </tr>
+                    <tr>
+                        <td>4</td>
+                        <td>(1,3), (2,2), (3,1)</td>
+                        <td>3/36</td>
+                    </tr>
+                    <tr>
+                        <td>...</td>
+                        <td>...</td>
+                        <td>...</td>
+                    </tr>
+                    <tr>
+                        <td><strong>7</strong></td>
+                        <td>(1,6), (2,5), ..., (6,1)</td>
+                        <td><strong>6/36</strong></td>
+                    </tr>
+                </table>
+            </div>
+
+            <div class="highlight">
+                7が最も出やすい！これは実際のカジノゲームでも重要な知識です
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🎯 2つのサイコロのシミュレーション</h2>
+            
+            <div class="code-block">
+# 2つのサイコロの和をシミュレーション
+n_rolls = 10000
+sums = [rand(1:6) + rand(1:6) for _ in 1:n_rolls]
+
+# 理論的確率
+theoretical_probs = [1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1] ./ 36
+
+# ヒストグラムと理論値を比較
+histogram(sums, bins=1.5:1:12.5, normalize=true,
+         title="2つのサイコロの和の分布", 
+         xlabel="サイコロの和", ylabel="確率")
+
+plot!(2:12, theoretical_probs, 
+      color=:red, linewidth=3, marker=:circle, 
+      label="理論値")
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🎂 誕生日のパラドックス</h2>
+            
+            <h3>驚きの確率現象！</h3>
+            <p><strong>問題：30人のクラスで、同じ誕生日の人が2人以上いる確率は？</strong></p>
+
+            <div class="highlight">
+                <p><strong>直感：</strong>365日もあるし、30人くらいなら確率は低そう...<br>
+                <strong>現実：</strong>なんと約70%の確率で同じ誕生日の人がいる！</p>
+            </div>
+
+            <h3>なぜこんなに高い？</h3>
+            <ul>
+                <li>比較する組み合わせが多い（30人なら435通り！）</li>
+                <li>「特定の日」ではなく「どこかで重複」を調べている</li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <h2>🎂 誕生日パラドックスのシミュレーション</h2>
+            
+            <div class="code-block">
+# 誕生日の重複をチェック
+function has_birthday_collision(n_people)
+    birthdays = rand(1:365, n_people)
+    return length(unique(birthdays)) < n_people
+end
+
+# シミュレーション実行
+function birthday_simulation(n_people, n_trials=10000)
+    collisions = sum([has_birthday_collision(n_people) 
+                     for _ in 1:n_trials])
+    return collisions / n_trials
+end
+
+# 様々な人数で実験
+for n in [10, 15, 20, 23, 25, 30, 35, 40, 50]
+    prob = birthday_simulation(n)
+    println("$(n)人: $(round(prob*100, digits=1))%")
+end
+            </div>
+
+            <p><strong>23人で50%を超える！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>📊 誕生日パラドックスの可視化</h2>
+            
+            <div class="code-block">
+people_counts = 5:5:60
+probabilities = [birthday_simulation(n) for n in people_counts]
+
+plot(people_counts, probabilities, 
+     marker=:circle, linewidth=2,
+     title="誕生日パラドックス", 
+     xlabel="クラスの人数", 
+     ylabel="同じ誕生日の人がいる確率")
+
+# 50%ラインを追加
+hline!([0.5], color=:red, linestyle=:dash, label="50%")
+
+# 23人のポイントを強調
+scatter!([23], [birthday_simulation(23)], 
+         markersize=10, color=:orange, 
+         label="23人")
+            </div>
+
+            <p><strong>グラフで見ると急激に確率が上がることがわかります！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>🎯 モンテカルロ法：πを求めよう</h2>
+            
+            <h3>ランダムな点で円周率を計算！</h3>
+            <p><strong>アイデア：</strong></p>
+            <ol>
+                <li>正方形の中にランダムに点を打つ</li>
+                <li>円の内側に入る点の割合を数える</li>
+                <li>π ≈ 4 × (円内の点数) / (全体の点数)</li>
+            </ol>
+
+            <div class="code-block">
+function estimate_pi(n_points)
+    inside_circle = 0
+    for _ in 1:n_points
+        x, y = rand() * 2 - 1, rand() * 2 - 1  # -1〜1の範囲
+        if x^2 + y^2 <= 1  # 単位円の内部
+            inside_circle += 1
+        end
+    end
+    return 4 * inside_circle / n_points
+end
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📈 モンテカルロ法の収束</h2>
+            
+            <div class="code-block">
+# 異なる点数でπを推定
+point_counts = [100, 1000, 10000, 100000, 1000000]
+pi_estimates = [estimate_pi(n) for n in point_counts]
+
+println("モンテカルロ法による円周率の推定：")
+for i in 1:length(point_counts)
+    n = point_counts[i]
+    pi_est = pi_estimates[i]
+    error = abs(pi_est - π)
+    println("$(n)点: π ≈ $(round(pi_est, digits=4))")
+    println("       誤差: $(round(error, digits=4))")
+end
+
+println("真の値: π = $(round(π, digits=6))")
+            </div>
+
+            <p><strong>点数が増えるほど正確になります！</strong></p>
+        </div>
+
+        <div class="slide">
+            <h2>🎨 モンテカルロ法の可視化</h2>
+            
+            <div class="code-block">
+# 少数の点で可視化
+n_points = 1000
+points_inside = []
+points_outside = []
+
+for _ in 1:n_points
+    x, y = rand() * 2 - 1, rand() * 2 - 1
+    if x^2 + y^2 <= 1
+        push!(points_inside, (x, y))
+    else
+        push!(points_outside, (x, y))
+    end
+end
+
+# 散布図で表示（円の内側は青、外側は赤）
+scatter([p[1] for p in points_inside], [p[2] for p in points_inside], 
+        color=:blue, markersize=2, label="円の内側")
+scatter!([p[1] for p in points_outside], [p[2] for p in points_outside], 
+         color=:red, markersize=2, label="円の外側")
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📝 実習：確率を体験しよう</h2>
+            <p><strong>実際にGoogle Colabで以下を試してみましょう</strong></p>
+            
+            <ol>
+                <li><strong>コイン投げ</strong>：大数の法則を体験</li>
+                <li><strong>サイコロ</strong>：等確率の検証</li>
+                <li><strong>誕生日パラドックス</strong>：直感に反する確率</li>
+                <li><strong>モンテカルロ法</strong>：πの近似計算</li>
+                <li><strong>自分だけの確率実験</strong>：オリジナル問題に挑戦</li>
+            </ol>
+
+            <div class="highlight">
+                理論だけでなく、実際にシミュレーションして確率を体感しましょう！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📚 本日の演習問題</h2>
+            
+            <h3>問題1: ジャンケンの確率</h3>
+            <p>ジャンケンで「あいこ」になる確率をシミュレーションで求める（理論値1/3と比較）</p>
+
+            <h3>問題2: 3つのサイコロの最大値</h3>
+            <p>3つのサイコロの最大値が6になる確率を求める</p>
+
+            <h3>問題3: 自由課題（以下から選択）</h3>
+            <p><strong>A. モンティ・ホール問題</strong>：ドアを変更する戦略の効果<br>
+            <strong>B. ランダムウォーク</strong>：酔歩問題のシミュレーション<br>
+            <strong>C. オリジナル問題</strong>：自分で考えた確率問題</p>
+
+            <div class="success">
+                創造性を発揮して、面白い確率問題に挑戦してみましょう！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>🌟 5日間の総復習</h2>
+            
+            <h3><strong>Day 1</strong>: Julia言語の基礎</h3>
+            <p>✅ Google Colabの使い方<br>
+            ✅ 基本計算と数学関数<br>
+            ✅ 変数と数式の処理</p>
+
+            <h3><strong>Day 2</strong>: 関数とグラフ</h3>
+            <p>✅ 関数の定義方法<br>
+            ✅ 美しいグラフの描画<br>
+            ✅ 複数関数の比較分析</p>
+
+            <h3><strong>Day 3</strong>: 最適化</h3>
+            <p>✅ 最大・最小値の数値探索<br>
+            ✅ グラフによる視覚的理解<br>
+            ✅ 制約条件付き最適化</p>
+        </div>
+
+        <div class="slide">
+            <h2>🌟 5日間の総復習（続き）</h2>
+            
+            <h3><strong>Day 4</strong>: データ分析</h3>
+            <p>✅ 統計量の計算と解釈<br>
+            ✅ ヒストグラムと散布図<br>
+            ✅ 相関分析と回帰直線</p>
+
+            <h3><strong>Day 5</strong>: 確率とシミュレーション</h3>
+            <p>✅ 確率現象のシミュレーション<br>
+            ✅ 理論値と実験値の比較<br>
+            ✅ モンテカルロ法による数値計算</p>
+
+            <div class="highlight">
+                5日間で、数学とプログラミングの強力な組み合わせを体験しました！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>💪 身につけたスキル</h2>
+            
+            <h3>プログラミングスキル</h3>
+            <ul>
+                <li><strong>Julia言語</strong>の基本的な使い方</li>
+                <li><strong>関数定義</strong>と<strong>グラフ描画</strong></li>
+                <li><strong>データ処理</strong>と<strong>統計分析</strong></li>
+                <li><strong>シミュレーション</strong>技術</li>
+            </ul>
+
+            <h3>数学的思考力</h3>
+            <ul>
+                <li><strong>視覚化</strong>による直感的理解</li>
+                <li><strong>数値計算</strong>による問題解決</li>
+                <li><strong>統計的</strong>な現象の理解</li>
+                <li><strong>確率的</strong>な思考方法</li>
+            </ul>
+
+            <h3>問題解決能力</h3>
+            <ul>
+                <li><strong>仮説→実験→検証</strong>のサイクル</li>
+                <li><strong>理論と実践</strong>の橋渡し</li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <h2>🚀 今後の学習に向けて</h2>
+            
+            <h3>大学での学習</h3>
+            <ul>
+                <li><strong>微積分</strong>：関数の解析がより深く理解できる</li>
+                <li><strong>線形代数</strong>：行列計算をJuliaで実践</li>
+                <li><strong>統計学</strong>：今日学んだ基礎をさらに発展</li>
+                <li><strong>物理・化学</strong>：数値実験とシミュレーション</li>
+            </ul>
+
+            <h3>将来のキャリア</h3>
+            <ul>
+                <li><strong>データサイエンティスト</strong>：今日学んだスキルが基礎</li>
+                <li><strong>AI・機械学習エンジニア</strong>：確率とプログラミングが必須</li>
+                <li><strong>金融工学</strong>：リスク分析にモンテカルロ法</li>
+                <li><strong>研究者</strong>：あらゆる分野で数値計算が重要</li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <h2>🎯 演習問題を解いてみよう！</h2>
+            <p><strong>Google Colabを開いて、最後の実習に挑戦しましょう</strong></p>
+            
+            <h3>取り組み方</h3>
+            <ol>
+                <li><strong>問題を理解</strong>する</li>
+                <li><strong>シミュレーション</strong>を設計する</li>
+                <li><strong>理論値を計算</strong>する（可能であれば）</li>
+                <li><strong>結果を比較</strong>・<strong>検証</strong>する</li>
+                <li><strong>グラフで可視化</strong>する</li>
+                <li><strong>考察</strong>をまとめる</li>
+            </ol>
+
+            <div class="highlight">
+                5日間の学習の集大成です。全力で取り組みましょう！
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="celebration">
+                🎉 お疲れさまでした！ 🎉
+            </div>
+
+            <div class="final-message">
+                <h3>5日間の「高校数学とJulia言語」講習会</h3>
+                <h3>完走おめでとうございます！</h3>
+                
+                <p><strong>皆さんは今、数学とプログラミングという</strong><br>
+                <strong>2つの強力な武器を手に入れました</strong></p>
+                
+                <p><strong>この経験が、皆さんの未来を</strong><br>
+                <strong>より豊かで創造的なものにしてくれることを</strong><br>
+                <strong>心から願っています</strong></p>
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>💡 最終メッセージ</h2>
+            
+            <h3>数学 × プログラミング = 無限の可能性</h3>
+            <ul>
+                <li><strong>数学</strong>は「<strong>考える力</strong>」を育てます</li>
+                <li><strong>プログラミング</strong>は「<strong>実現する力</strong>」を育てます</li>
+                <li><strong>この2つの組み合わせ</strong>で、皆さんの可能性は無限に広がります</li>
+            </ul>
+
+            <h3>今後への提案</h3>
+            <ol>
+                <li><strong>続けること</strong>：学んだスキルを忘れないよう定期的に使う</li>
+                <li><strong>深めること</strong>：興味を持った分野をさらに探求する</li>
+                <li><strong>応用すること</strong>：他の教科や日常生活でも活用する</li>
+                <li><strong>創造すること</strong>：自分だけのプロジェクトに挑戦する</li>
+            </ol>
+
+            <div class="success">
+                今回学んだ技術を使って、ぜひ自分だけの面白いプロジェクトに挑戦してください！
+            </div>
+        </div>
+
+        <div class="slide">
+            <h2>📚 参考資料・今後の学習</h2>
+            
+            <h3>公式ドキュメント</h3>
+            <ul>
+                <li>Julia Documentation: https://docs.julialang.org/</li>
+                <li>Plots.jl: https://docs.juliaplots.org/</li>
+                <li>Statistics.jl: https://docs.julialang.org/en/v1/stdlib/Statistics/</li>
+            </ul>
+
+            <h3>学習リソース</h3>
+            <ul>
+                <li>オンライン学習サイト</li>
+                <li>確率・統計の参考書</li>
+                <li>データサイエンス入門書</li>
+                <li>プログラミング関連書籍</li>
+            </ul>
+
+            <h3>コミュニティ</h3>
+            <ul>
+                <li>Julia言語のコミュニティ</li>
+                <li>数学・統計学の勉強会</li>
+                <li>プログラミング学習グループ</li>
+            </ul>
+        </div>
+
+        <div class="slide">
+            <h2>❓ 最後の質問タイム</h2>
+            <p><strong>何か質問はありませんか？</strong></p>
+            
+            <ul>
+                <li>今日学んだ確率・シミュレーションについて</li>
+                <li>5日間の内容全般について</li>
+                <li>今後の学習方法について</li>
+                <li>プログラミングと数学の関係について</li>
+                <li>将来のキャリアについて</li>
+                <li>その他、何でも！</li>
+            </ul>
+
+            <div class="highlight">
+                遠慮なく質問してください。皆さんの学習を最後まで全力でサポートします！
+            </div>
+        </div>
+
+        <div class="slide">
+            <div class="celebration">
+                🎊 本当にお疲れさまでした！ 🎊
+                
+                <p><strong>5日間、よく頑張りました！</strong></p>
+                
+                <p><strong>皆さんの今後の成長と活躍を</strong><br>
+                <strong>心から応援しています！</strong></p>
+                
+                <p><strong>Keep coding, keep learning!</strong></p>
+            </div>
+
+            <h3>宿題</h3>
+            <p>最後の演習問題を完成させて、Google Classroomに提出してください。</p>
+
+            <p><strong>また会える日を楽しみにしています！</strong> 👋</p>
+        </div>
+    </div>
+</body>
+</html>
