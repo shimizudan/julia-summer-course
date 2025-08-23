@@ -195,12 +195,7 @@
         ];
         
         function createColabUrl(filename) {
-            const repoUrl = window.location.origin + window.location.pathname.replace('/index.html', '');
-            return `https://colab.research.google.com/github/USER/REPO/blob/main/${filename}`;
-        }
-        
-        function createGitHubUrl(filename) {
-            return `./${filename}`;
+            return `https://colab.research.google.com/github/shimizudan/julia-summer-course/blob/main/${filename}?hl=ja`;
         }
         
         function renderDays() {
@@ -217,7 +212,7 @@
                     <h3 class="day-title">Day ${dayData.day}: ${dayData.title}</h3>
                     <p style="color: #666; margin-bottom: 20px;">${dayData.description}</p>
                     <div class="materials">
-                        <a href="#" class="material-btn notebook-btn" onclick="openInColab('${notebookFile}')">
+                        <a href="${createColabUrl(notebookFile)}" class="material-btn notebook-btn" target="_blank">
                             <span class="icon">📓</span>
                             Notebook (Colab)
                         </a>
@@ -229,21 +224,6 @@
                 `;
                 
                 grid.appendChild(dayCard);
-            });
-        }
-        
-        function openInColab(filename) {
-            const currentUrl = window.location.href;
-            const baseUrl = currentUrl.substring(0, currentUrl.lastIndexOf('/') + 1);
-            const fileUrl = baseUrl + filename;
-            const colabUrl = `https://colab.research.google.com/github/googlecolab/colabtools/blob/master/notebooks/colab-github-demo.ipynb#scrollTo=WOJ4UDqhF8NW`;
-            
-            alert(`Google Colabでファイルを開くには：\n1. 以下のURLをコピーしてください：\n${fileUrl}\n\n2. Google Colab (https://colab.research.google.com/) を開き、\n「ファイル」→「ノートブックを開く」→「GitHub」タブから、\nまたは「アップロード」タブでローカルファイルを選択してください。`);
-            
-            navigator.clipboard.writeText(fileUrl).then(() => {
-                console.log('ファイルURLをクリップボードにコピーしました');
-            }).catch(err => {
-                console.error('クリップボードへのコピーに失敗しました:', err);
             });
         }
         
